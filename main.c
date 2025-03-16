@@ -17,64 +17,64 @@ void main(void){
 
 
   while(1){
-	switch(state){
+  switch(state){
 
 	case state0: //   StepperUsingJoyStick
-	    IE2 |= UCA0RXIE; // Enable USCI_A0 RX interrupt
-	    switch(stateStepp){
-	    case stateAutoRotate:
-	       //As long as there is a flag, run
-	        while(rotateIFG){START_TIMERA0(600); curr_counter++; Stepper_clockwise(); }
-	        break;
-
-        case stateStopRotate:
-            break;
-
-        case stateJSRotate:
-            counter=513;
-            StepperUsingJoyStick();
-            break;
-        case stateDefault:
-            __bis_SR_register(LPM0_bits + GIE);       // Enter LPM0 w/ until Byte in RXed
-            break;
-	    }
-	    break;
+		    IE2 |= UCA0RXIE; // Enable USCI_A0 RX interrupt
+		    switch(stateStepp){
+		    case stateAutoRotate:
+		       //As long as there is a flag, run
+		        while(rotateIFG){START_TIMERA0(600); curr_counter++; Stepper_clockwise(); }
+		        break;
+	
+	            case stateStopRotate:
+	            	break;
+	
+	            case stateJSRotate:
+		            counter=513;
+		            StepperUsingJoyStick();
+	            break;
+	            case stateDefault:
+	            	__bis_SR_register(LPM0_bits + GIE);       // Enter LPM0 w/ until Byte in RXed
+	            break;
+		    }
+	break;
 
 	case state1: // Paint
-	    JoyStickIntEN |= BIT5;
-	    while (state == state1){JoyStick_Painter();}
-        JoyStickIntEN &= ~BIT5;
-	    break;
+		    JoyStickIntEN |= BIT5;
+		    while (state == state1){JoyStick_Painter();}
+	        JoyStickIntEN &= ~BIT5;
+	break;
 
 	case state2: // Calibrate
-        IE2 |= UCA0RXIE;                          // Enable USCI_A0 RX interrupt
-
-        switch(stateStepp){
-        case stateDefault:
-            JoyStickIntEN |= BIT5;
-            __bis_SR_register(LPM0_bits + GIE);       // Enter LPM0 w/ int until Byte RXed
-            break;
-
-        case stateAutoRotate: // start rotate
-            counter = 0;
-            while(rotateIFG) {START_TIMERA0(600);Stepper_clockwise(); counter++; }
-            break;
-
-        case stateStopRotate: // stop and set phi
-            JoyStickIntEN &= ~BIT5;
-            calibrate();
-            break;
-        }
-	    break;
+	        IE2 |= UCA0RXIE;                          // Enable USCI_A0 RX interrupt
+	
+	        switch(stateStepp){
+	        case stateDefault:
+	            JoyStickIntEN |= BIT5;
+	            __bis_SR_register(LPM0_bits + GIE);       // Enter LPM0 w/ int until Byte RXed
+	            break;
+	
+	        case stateAutoRotate: // start rotate
+	            counter = 0;
+	            while(rotateIFG) {START_TIMERA0(600);Stepper_clockwise(); counter++; }
+	            break;
+	
+	        case stateStopRotate: // stop and set phi
+	            JoyStickIntEN &= ~BIT5;
+	            calibrate();
+	            break;
+	        }
+	break;
 
 	case state3:  //Script
-        IE2 |= UCA0RXIE;                          // Enable USCI_A0 RX interrupt
-	    while ( state == state3){
-	        ScriptFunc();
-	    }
+	        IE2 |= UCA0RXIE;                          // Enable USCI_A0 RX interrupt
+		    while ( state == state3){
+		        ScriptFunc();
+		    }
         break;
 		
-	}
+     }
   }
 }
 
