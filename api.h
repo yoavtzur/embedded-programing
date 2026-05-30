@@ -11,7 +11,7 @@ extern void ExecuteScript();
 extern void JoyStick_Painter();
 extern void JoyStickADC_Steppermotor();
 
-extern void StepperUsingJoyStick(); // dont understen
+extern void StepperUsingJoyStick(); // 
 
 extern void inc_lcd(int);
 extern void dec_lcd(int);
